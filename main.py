@@ -35,6 +35,7 @@ from requests_html import Element, HTMLSession, HTML
 
 #import xlsxwriter
 import PreApp
+PreApp.snapshot.print_summary()
 
 
 if platform.system() == 'Darwin':

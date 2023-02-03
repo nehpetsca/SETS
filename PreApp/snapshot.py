@@ -1,4 +1,9 @@
-import sys, platform, subprocess, glob, re
+import glob
+import platform
+import re
+import subprocess
+import sys
+
 python_version = sys.version
 python_version = python_version.replace('\r', '')
 python_version = python_version.replace('\n', '')
@@ -36,12 +41,6 @@ try:
 except:
     distribution = ''
 
-os_text = '{} {}'.format(system, release)
-if build:
-    os_text += ' ({})'.format(build)
-if distribution:
-    os_text += ' ({})'.format(distribution)
-
 try:
     import PIL
     PIL_version = PIL.__version__
@@ -58,13 +57,6 @@ try:
 except:
     PIL_libs = ''
 
-PIL_libs_cleaned = ''
-if PIL_libs:
-    PIL_lib_lines = PIL_libs.splitlines(True)
-    for i in range(len(PIL_lib_lines)):
-        #PIL_libs_cleaned += PIL_lib_lines[i]+'\n'
-        PIL_libs_cleaned += re.sub(' (=>|\(0x).*$', '', PIL_lib_lines[i])
-
 try:
     import numpy
     numpy_version = numpy.__version__
@@ -77,36 +69,62 @@ try:
 except:
     tkmacosx_version = ''
 
-snapshot = {
-    'python': python_version,
-    'OS': os_text,
-    'screen-dpi': '{} ({}dpi x{})'.format(tk_screen_geometry, dpi, factor),
-}
 
-modules= {
-    'tkinter': tkinter_version,
-    'Pillow': PIL_version,
-    'numpy': numpy_version,
-    'tkLocal': tkmacosx_version,
-}
+def print_summary():
+    """ prints system and version information """
 
-min_title_width = 12
-for type in snapshot:
-    if len(type) > min_title_width:
-        min_title_width = len(type)
+    min_title_width = 12
 
-for type in snapshot:
-    print('{:>{min}}: {}'.format(type, snapshot[type], min=min_title_width+1))
+    os_text = '{} {}'.format(system, release)
+    if build:
+        os_text += ' ({})'.format(build)
+    if distribution:
+        os_text += ' ({})'.format(distribution)
 
-modules_text = '{:>{min}}: '.format('modules', min=min_title_width+1)
+    snapshot = {
+        'python': python_version,
+        'OS': os_text,
+        'screen-dpi': '{} ({}dpi x{})'.format(tk_screen_geometry, dpi, factor),
+    }
 
-for type in modules:
-    if modules[type]:
-        modules_text += '({} {}) '.format(type, modules[type])
+    modules = {
+        'tkinter': tkinter_version,
+        'Pillow': PIL_version,
+        'numpy': numpy_version,
+        'tkLocal': tkmacosx_version,
+    }
 
-print(modules_text)
-if PIL_libs_cleaned:
-    print('{:>{min}}:'.format('Pillow-libs', min=min_title_width+1))
-    print(PIL_libs_cleaned)
-    # print(PIL_libs)
+    pil_libs_cleaned = ''
+    if PIL_libs:
+        pil_lib_lines = PIL_libs.splitlines(True)
+        for i in range(len(pil_lib_lines)):
+            # pil_libs_cleaned += pil_lib_lines[i]+'\n'
+            pil_libs_cleaned += re.sub(' (=>|\(0x).*$', '', pil_lib_lines[i])
 
+    for type in snapshot:
+        if len(type) > min_title_width:
+            min_title_width = len(type)
+
+    for type in snapshot:
+        print('{:>{min}}: {}'.format(type, snapshot[type], min=min_title_width+1))
+
+    modules_text = '{:>{min}}: '.format('modules', min=min_title_width+1)
+
+    for type in modules:
+        if modules[type]:
+            modules_text += '({} {}) '.format(type, modules[type])
+
+    print(modules_text)
+    if pil_libs_cleaned:
+        print('{:>{min}}:'.format('Pillow-libs', min=min_title_width+1))
+        print(pil_libs_cleaned)
+        # print(PIL_libs)
+
+
+def __init__() -> None:
+    """Main setup function"""
+    print_summary()
+
+
+if __name__ == "__main__":
+    print_summary()
