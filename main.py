@@ -35,8 +35,6 @@ from requests_html import Element, HTMLSession, HTML
 
 #import xlsxwriter
 import PreApp
-PreApp.snapshot.print_summary()
-
 
 if platform.system() == 'Darwin':
     from tkmacosx import Button
@@ -6858,6 +6856,7 @@ class SETS():
         if __name__ != '__main__':
             return
 
+        PreApp.snapshot.print_summary(self.window)
         self.window.mainloop()
 
 

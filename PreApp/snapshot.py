@@ -18,19 +18,6 @@ except:
     build = ''
 
 try:
-    import tkinter as tk
-    tkinter_version = tk.Tcl().call("info", "patchlevel")
-    root = tk.Tk()
-    tk_screen_geometry = '{}x{}'.format(root.winfo_screenwidth(), root.winfo_screenheight())
-    dpi = round(root.winfo_fpixels('1i'), 0)
-    factor = (dpi / 96)
-except:
-    tkinter_version = 'fail'
-    tk_screen_geometry = 'fail'
-    dpi = ''
-    factor = ''
-
-try:
     import csv
     release_data = dict()
     with open('/etc/os-release') as f:
@@ -69,8 +56,17 @@ try:
 except:
     tkmacosx_version = ''
 
+try:
+    import tkinter as tk
+    tkinter_version = tk.Tcl().call("info", "patchlevel")
+except:
+    tkinter_version = 'fail'
+    tk_screen_geometry = 'fail'
+    dpi = ''
+    factor = ''
 
-def print_summary():
+
+def print_summary(tkobject=None):
     """ prints system and version information """
 
     min_title_width = 12
@@ -80,6 +76,13 @@ def print_summary():
         os_text += ' ({})'.format(build)
     if distribution:
         os_text += ' ({})'.format(distribution)
+
+    if tkinter_version != 'fail':
+        if tkobject is None:
+            tkobject = tk.Tk()
+        tk_screen_geometry = '{}x{}'.format(tkobject.winfo_screenwidth(), tkobject.winfo_screenheight())
+        dpi = round(tkobject.winfo_fpixels('1i'), 0)
+        factor = (dpi / 96)
 
     snapshot = {
         'python': python_version,
