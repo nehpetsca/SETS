@@ -34,6 +34,7 @@ from PIL import Image, ImageTk, ImageGrab
 from requests_html import Element, HTMLSession, HTML
 
 #import xlsxwriter
+import PreApp
 
 
 if platform.system() == 'Darwin':
