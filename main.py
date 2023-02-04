@@ -35,6 +35,7 @@ from requests_html import Element, HTMLSession, HTML
 
 #import xlsxwriter
 import PreApp
+PreApp.snapshot.print_summary() # system snapshot, screen snapshot done after window create
 
 if platform.system() == 'Darwin':
     from tkmacosx import Button
@@ -6824,6 +6825,7 @@ class SETS():
 
     def init_window(self):
         self.window = Tk()
+        PreApp.snapshot.print_screeninfo(self.window) # This is here to use the TK window for screen info
         self.window.iconphoto(False, PhotoImage(file=self.resource_path('local/icon.PNG', quiet=False)))
         self.window.title("STO Equipment and Trait Selector")
         self.window.bind('<Configure>', self.resized_main_window)
@@ -6856,7 +6858,6 @@ class SETS():
         if __name__ != '__main__':
             return
 
-        PreApp.snapshot.print_summary(self.window)
         self.window.mainloop()
 
 

@@ -66,17 +66,10 @@ except:
     factor = ''
 
 
-def print_summary(tkobject=None):
-    """ prints system and version information """
+def print_screeninfo(tkobject=None):
+    """ prints screen information using the provided or generic tk window """
 
     min_title_width = 12
-
-    os_text = '{} {}'.format(system, release)
-    if build:
-        os_text += ' ({})'.format(build)
-    if distribution:
-        os_text += ' ({})'.format(distribution)
-
     if tkinter_version != 'fail':
         if tkobject is None:
             tkobject = tk.Tk()
@@ -85,9 +78,31 @@ def print_summary(tkobject=None):
         factor = (dpi / 96)
 
     snapshot = {
+        'screen-dpi': '{} ({}dpi x{})'.format(tk_screen_geometry, dpi, factor),
+    }
+
+    for type in snapshot:
+        if len(type) > min_title_width:
+            min_title_width = len(type)
+
+    for type in snapshot:
+        print('{:>{min}}: {}'.format(type, snapshot[type], min=min_title_width+1))
+
+
+def print_summary():
+    """ prints system, python, package version information """
+
+    min_title_width = 12
+    os_text = '{} {}'.format(system, release)
+    if build:
+        os_text += ' ({})'.format(build)
+    if distribution:
+        os_text += ' ({})'.format(distribution)
+
+    snapshot = {
         'python': python_version,
         'OS': os_text,
-        'screen-dpi': '{} ({}dpi x{})'.format(tk_screen_geometry, dpi, factor),
+        # 'screen-dpi': '{} ({}dpi x{})'.format(tk_screen_geometry, dpi, factor),
     }
 
     modules = {
@@ -131,3 +146,4 @@ def __init__() -> None:
 
 if __name__ == "__main__":
     print_summary()
+    print_screeninfo()
