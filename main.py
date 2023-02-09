@@ -34,7 +34,7 @@ from PIL import Image, ImageTk, ImageGrab
 from requests_html import Element, HTMLSession, HTML
 
 #import xlsxwriter
-import PreApp
+import src.PreApp as PreApp
 PreApp.snapshot.print_summary() # system snapshot, screen snapshot done after window create
 
 if platform.system() == 'Darwin':
