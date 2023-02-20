@@ -1282,11 +1282,12 @@ class SETS():
         if 'traits' in self.cache and 'space' in self.cache['traits']:
             return self.cache['traits']
 
-        for item in list(self.traits):
-            if not 'chartype' in item or item['chartype'] != 'char':
-                continue
-            if 'type' in item and 'name' in item and 'description' in item and 'environment' in item:
-                self.precacheTraitSingle(item['name'], item['description'], item['environment'], item['type'])
+        if isinstance(self.traits, list):
+            for item in list(self.traits):
+                if not 'chartype' in item or item['chartype'] != 'char':
+                    continue
+                if 'type' in item and 'name' in item and 'description' in item and 'environment' in item:
+                    self.precacheTraitSingle(item['name'], item['description'], item['environment'], item['type'])
 
         for type in self.cache['traitsWithImages']:
             for environment in self.cache['traitsWithImages'][type]:
@@ -1449,12 +1450,14 @@ class SETS():
         self.consoleSortOptions = [ 'tesu', 'uets', 'utse', 'uest' ]
         self.options_tags = ["Concept", "First Tests", "Optimization Phase", "Finished Build"]
 
+
         # self.persistent will be auto-saved and auto-loaded for persistent state data
         self.persistent = {
             'forceJsonLoad': 0,
             'fast_start': 0,
             'uiScale': 1,
             'geometry': '',
+            'window_on_top': False,
             'tooltipDelay': 2,
             'imagesFactionAliases': dict(),
             'imagesFail': dict(),
@@ -6822,6 +6825,10 @@ class SETS():
             self.windowWidth = value.width
             self.windowHeight = value.height
             self.ui_update_log()
+
+    def window_over_top(self):
+        self.attributes('-topmost', self.persistent['window_on_top'])
+        self.update()
 
     def init_window(self):
         self.window = Tk()
